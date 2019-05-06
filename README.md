@@ -18,5 +18,10 @@
 
 ### 主代理启动
 
+安装net-snmp 
+
 snmpd --master=agentx  默认启动在后台
 
+
+### 子代理启动
+如果加入启动项 eg:service your agent start
