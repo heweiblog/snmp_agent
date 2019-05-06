@@ -25,3 +25,10 @@ snmpd --master=agentx  默认启动在后台
 
 ### 子代理启动
 如果加入启动项 eg:service your agent start
+
+
+### 可参考
+
+https://www.jianshu.com/p/d1290258a42a
+
+https://www.cnblogs.com/shenlinken/p/5316021.html
