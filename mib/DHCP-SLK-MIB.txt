@@ -1,0 +1,90 @@
+-- DHCP-SLK-MIB.txt
+     DHCP-SLK-MIB DEFINITIONS ::= BEGIN
+ 
+         IMPORTS
+             OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP
+                 FROM SNMPv2-CONF
+             enterprises, Integer32, Unsigned32, OBJECT-TYPE, MODULE-IDENTITY,
+             NOTIFICATION-TYPE
+                 FROM SNMPv2-SMI
+             DisplayString
+                 FROM SNMPv2-TC;
+ 
+         DHCP MODULE-IDENTITY
+             LAST-UPDATED "201903010000Z"       
+             ORGANIZATION
+                 "SHANGHAI YAMU NETWORKS CO.,LTD."
+             CONTACT-INFO
+                 "ww.he@yamu.com"
+             DESCRIPTION
+                 "Yamu Dhcp Snmp MIB."
+             ::= { enterprises 47032 }
+ 
+         Dhcp OBJECT IDENTIFIER ::= { DHCP 5 }
+ 
+         DhcpStat OBJECT IDENTIFIER ::= { Dhcp 1 }
+ 
+         Lps OBJECT IDENTIFIER ::= { DhcpStat 1 }
+
+         DhcpLps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp lps statistics"
+            ::= { Lps 1 }
+
+         DhcpIpv4Lps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp lps statistics"
+            ::= { Lps 2 }
+
+         DhcpIpv6Lps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp lps statistics"
+            ::= { Lps 3 }
+
+
+
+         Request OBJECT IDENTIFIER ::= { DhcpStat 2 }
+
+         DhcpDiscover OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp qps statistics"
+            ::= { Request 1 }
+
+         DhcpOffer OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp qps statistics"
+            ::= { Request 2 }
+
+         DhcpQps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp qps statistics"
+            ::= { Request 3 }
+
+         DhcpAck OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dhcp qps statistics"
+            ::= { Request 4 }
+
+    END
+-- DHCP-SLK-MIB.txt

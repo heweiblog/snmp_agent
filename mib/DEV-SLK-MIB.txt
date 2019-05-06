@@ -1,0 +1,48 @@
+-- DEV-SLK-MIB.txt
+     DEV-SLK-MIB DEFINITIONS ::= BEGIN
+ 
+         IMPORTS
+             OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP
+                 FROM SNMPv2-CONF
+             enterprises, Integer32, Unsigned32, OBJECT-TYPE, MODULE-IDENTITY,
+             NOTIFICATION-TYPE
+                 FROM SNMPv2-SMI
+             DisplayString
+                 FROM SNMPv2-TC;
+ 
+         DEV MODULE-IDENTITY
+             LAST-UPDATED "201903010000Z"       
+             ORGANIZATION
+                 "SHANGHAI YAMU NETWORKS CO.,LTD."
+             CONTACT-INFO
+                 "ww.he@yamu.com"
+             DESCRIPTION
+                 "DEV Soft Snmp MIB."
+             ::= { enterprises 47032 }
+ 
+         Dev OBJECT IDENTIFIER ::= { DEV 3 }
+
+         Cpu OBJECT IDENTIFIER ::= { Dev 1 }
+ 
+         Cpu5s OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dev cpu"
+            ::= { Cpu 1 }
+ 
+
+         Mem OBJECT IDENTIFIER ::= { Dev 2 }
+
+         MemoryUsage OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dev cpu"
+            ::= { Mem 1 }
+ 
+
+    END
+-- DEV-SLK-MIB.txt

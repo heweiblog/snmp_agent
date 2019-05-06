@@ -1,0 +1,147 @@
+-- DNS-SLK-MIB.txt
+     DNS-SLK-MIB DEFINITIONS ::= BEGIN
+ 
+         IMPORTS
+             OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP
+                 FROM SNMPv2-CONF
+             enterprises, Integer32, Unsigned32, OBJECT-TYPE, MODULE-IDENTITY,
+             NOTIFICATION-TYPE
+                 FROM SNMPv2-SMI
+             DisplayString
+                 FROM SNMPv2-TC;
+ 
+         DNS MODULE-IDENTITY
+             LAST-UPDATED "201903010000Z"       
+             ORGANIZATION
+                 "SHANGHAI YAMU NETWORKS CO.,LTD."
+             CONTACT-INFO
+                 "ww.he@yamu.com"
+             DESCRIPTION
+                 "Yamu Dns Snmp MIB."
+             ::= { enterprises 47032 }
+ 
+         Dns OBJECT IDENTIFIER ::= { DNS 4 }
+ 
+         DnsStat OBJECT IDENTIFIER ::= { Dns 1 }
+
+         RequestType OBJECT IDENTIFIER ::= { DnsStat 1 }
+
+         IpType OBJECT IDENTIFIER ::= { RequestType 1 }
+
+         TatalRequest OBJECT IDENTIFIER ::= { IpType 1 }
+
+         DnsQps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns total qps statistics"
+            ::= { TatalRequest 1 }
+
+         DnsIpv4Qps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns ipv4 qps statistics"
+            ::= { TatalRequest 2 }
+
+         DnsIpv6Qps OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns ipv6 qps statistics"
+            ::= { TatalRequest 3 }
+
+
+		 RRType OBJECT IDENTIFIER ::= { RequestType 2 } 
+
+		 AType OBJECT IDENTIFIER ::= { RRType 1 } 
+
+         ATotal OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr a qps statistics"
+            ::= { AType 1 }
+
+         AIpv4Total OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr a ipv4 qps statistics"
+            ::= { AType 2 }
+
+         AIpv6Total OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr a ipv6 qps statistics"
+            ::= { AType 3 }
+
+
+		 NsType OBJECT IDENTIFIER ::= { RRType 2 } 
+
+         NsTotal OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr ns total qps statistics"
+            ::= { NsType 1 }
+
+         NsIpv4Total OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr ns ipv4 qps statistics"
+            ::= { NsType 2 }
+
+         NsIpv6Total OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns rr ns ipv6 qps statistics"
+            ::= { NsType 3 }
+
+
+         ResponseType OBJECT IDENTIFIER ::= { DnsStat 2 }
+
+         ResponseIpType OBJECT IDENTIFIER ::= { ResponseType 1 }
+
+         TatalResponse OBJECT IDENTIFIER ::= { ResponseIpType 1 }
+
+         DnsResponseTatal OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns Response statistics"
+            ::= { TatalResponse 1 }
+
+         DnsIpv4Response OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns ipv4 Response statistics"
+            ::= { TatalResponse 2 }
+
+         DnsIpv6Response OBJECT-TYPE
+             SYNTAX Integer32 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu yrdns ipv6 Response statistics"
+            ::= { TatalResponse 3 }
+
+
+
+    END
+-- DNS-SLK-MIB.txt
