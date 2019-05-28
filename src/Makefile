@@ -1,4 +1,4 @@
-TGT=yamu_agent
+TGT=yamu_snmp_agent
 
 all:$(TGT)
 	@echo Generation target!	

@@ -16,13 +16,15 @@
 [ "${NETWORKING}" = "no" ] && exit 0
 
 RETVAL=0
-name="yamu_agent"
-prog="/usr/bin/yamu_agent"
+name="yamu_snmp_agent"
+prog="/usr/bin/yamu_snmp_agent"
 
 [ -x $prog -a -f /etc/snmp/snmpd.conf ] || exit 0
 
 start() {
         # Start daemons.
+		service snmpd stop
+		snmpd --master=agentx
         echo -n $"Starting $name: "
         daemon $prog
 	RETVAL=$?
