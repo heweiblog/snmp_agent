@@ -4,7 +4,7 @@ SRC = ./src
 all:
 	cd $(SRC) && $(MAKE)
 
-RPM_VERSION = 1.0.1
+RPM_VERSION = 1.0.4
 RPM_RELEASE = master
 RPM_TOP_DIR = $(shell rpm -E %{_topdir})
 PRJHOME = $(shell pwd)

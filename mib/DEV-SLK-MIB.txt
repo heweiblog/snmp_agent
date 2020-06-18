@@ -43,6 +43,28 @@
                  "yamu dev cpu"
             ::= { Mem 1 }
  
+         
+         Power OBJECT IDENTIFIER ::= { Dev 5 }
+ 
+         PowerInfo OBJECT-TYPE
+             SYNTAX DisplayString (SIZE (0..1000)) 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dev cpu"
+            ::= { Power 1 }
+ 
+
+         Fan OBJECT IDENTIFIER ::= { Dev 6 }
+
+         FanInfo OBJECT-TYPE
+             SYNTAX DisplayString (SIZE (0..1000)) 
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION
+                 "yamu dev cpu"
+            ::= { Fan 1 }
+ 
 
     END
 -- DEV-SLK-MIB.txt

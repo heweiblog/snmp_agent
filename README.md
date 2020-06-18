@@ -6,7 +6,7 @@
 
 ### 开发步骤
 
-1.编写MIB
+1.编写MIB,将MIB放入MIBS文件夹，位于/usr/local/snmp/share/snmp/mibs 或 /usr/share/snmp/mibs
 
 
 2.生成.c和.h文件 

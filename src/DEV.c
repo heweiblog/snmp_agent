@@ -6,12 +6,11 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
-#include "DEV.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include "DEV.h"
 
 int get_mem_useage(){
 		int fd = open("/proc/meminfo",O_RDONLY);
@@ -53,10 +52,6 @@ int get_cpu_useage(){
 				return 0;
 		}
 		char buf[1025] = {'\0'};
-		if(buf == NULL){
-				pclose(fp);
-				return 0;
-		}
 
 		int size = fread(buf,1024,1,fp);
 		if(size <= 0){
@@ -73,6 +68,45 @@ int get_cpu_useage(){
 }
 
 
+int get_fan(char*buf){
+		FILE* fp = popen("ipmi-sensors | grep FAN","r");
+		if(NULL == fp){
+				return -1;
+		}
+
+		const char* l = "\nID | Name | Type | Reading | Units | Event\n";
+		strcpy(buf,l);
+
+		int size = fread(buf+strlen(l),1024,1,fp);
+		if(size <= 0){
+				pclose(fp);
+				return -1;
+		}
+
+		pclose(fp);
+		return 0;
+}
+
+int get_power(char*buf){
+		FILE* fp = popen("ipmi-sensors | grep PS","r");
+		if(NULL == fp){
+				return -1;
+		}
+
+		const char* l = "\nID | Name | Type | Reading | Units | Event\n";
+		strcpy(buf,l);
+
+		int size = fread(buf+strlen(l),1024,1,fp);
+		if(size <= 0){
+				pclose(fp);
+				return -1;
+		}
+
+		pclose(fp);
+		return 0;
+}
+
+
 /** Initializes the DEV module */
 void
 init_DEV(void)
@@ -80,6 +114,8 @@ init_DEV(void)
     const oid       Cpu5s_oid[] = { 1, 3, 6, 1, 4, 1, 47032, 3, 1, 1 };
     const oid       MemoryUsage_oid[] =
         { 1, 3, 6, 1, 4, 1, 47032, 3, 2, 1 };
+    const oid       PowerInfo_oid[] = { 1, 3, 6, 1, 4, 1, 47032, 3, 5, 1 };
+    const oid       FanInfo_oid[] = { 1, 3, 6, 1, 4, 1, 47032, 3, 6, 1 };
 
     DEBUGMSGTL(("DEV", "Initializing\n"));
 
@@ -90,6 +126,13 @@ init_DEV(void)
                             ("MemoryUsage", handle_MemoryUsage,
                              MemoryUsage_oid, OID_LENGTH(MemoryUsage_oid),
                              HANDLER_CAN_RONLY));
+    netsnmp_register_scalar(netsnmp_create_handler_registration
+                            ("PowerInfo", handle_PowerInfo, PowerInfo_oid,
+                             OID_LENGTH(PowerInfo_oid),
+                             HANDLER_CAN_RONLY));
+    netsnmp_register_scalar(netsnmp_create_handler_registration
+                            ("FanInfo", handle_FanInfo, FanInfo_oid,
+                             OID_LENGTH(FanInfo_oid), HANDLER_CAN_RONLY));
 }
 
 int
@@ -107,8 +150,8 @@ handle_Cpu5s(netsnmp_mib_handler *handler,
      * a instance handler also only hands us one request at a time, so
      * we don't need to loop over a list of requests; we'll only get one. 
      */
+	int cpu = get_cpu_useage();
 
-	int  cpu = get_cpu_useage();
     switch (reqinfo->mode) {
 
     case MODE_GET:
@@ -149,7 +192,9 @@ handle_MemoryUsage(netsnmp_mib_handler *handler,
      * a instance handler also only hands us one request at a time, so
      * we don't need to loop over a list of requests; we'll only get one. 
      */
+
 	int mem = get_mem_useage();
+
     switch (reqinfo->mode) {
 
     case MODE_GET:
@@ -168,6 +213,92 @@ handle_MemoryUsage(netsnmp_mib_handler *handler,
          * we should never get here, so this is a really bad error 
          */
         snmp_log(LOG_ERR, "unknown mode (%d) in handle_MemoryUsage\n",
+                 reqinfo->mode);
+        return SNMP_ERR_GENERR;
+    }
+
+    return SNMP_ERR_NOERROR;
+}
+
+int
+handle_PowerInfo(netsnmp_mib_handler *handler,
+                 netsnmp_handler_registration *reginfo,
+                 netsnmp_agent_request_info *reqinfo,
+                 netsnmp_request_info *requests)
+{
+    /*
+     * We are never called for a GETNEXT if it's registered as a
+     * "instance", as it's "magically" handled for us.  
+     */
+
+    /*
+     * a instance handler also only hands us one request at a time, so
+     * we don't need to loop over a list of requests; we'll only get one. 
+     */
+	char buf[1024] = {'\0'};
+	get_power(buf);
+
+    switch (reqinfo->mode) {
+
+    case MODE_GET:
+        snmp_set_var_typed_value(requests->requestvb, ASN_OCTET_STR,
+                                 /*
+                                  * XXX: a pointer to the scalar's data 
+                                  */ buf,
+                                 /*
+                                  * XXX: the length of the data in bytes 
+                                  */ strlen(buf));
+        break;
+
+
+    default:
+        /*
+         * we should never get here, so this is a really bad error 
+         */
+        snmp_log(LOG_ERR, "unknown mode (%d) in handle_PowerInfo\n",
+                 reqinfo->mode);
+        return SNMP_ERR_GENERR;
+    }
+
+    return SNMP_ERR_NOERROR;
+}
+
+int
+handle_FanInfo(netsnmp_mib_handler *handler,
+               netsnmp_handler_registration *reginfo,
+               netsnmp_agent_request_info *reqinfo,
+               netsnmp_request_info *requests)
+{
+    /*
+     * We are never called for a GETNEXT if it's registered as a
+     * "instance", as it's "magically" handled for us.  
+     */
+
+    /*
+     * a instance handler also only hands us one request at a time, so
+     * we don't need to loop over a list of requests; we'll only get one. 
+     */
+	char buf[1024] = {'\0'};
+	get_fan(buf);
+
+    switch (reqinfo->mode) {
+
+    case MODE_GET:
+        snmp_set_var_typed_value(requests->requestvb, ASN_OCTET_STR,
+                                 /*
+                                  * XXX: a pointer to the scalar's data 
+                                  */ buf,
+                                 /*
+                                  * XXX: the length of the data in bytes 
+                                  */ strlen(buf));
+        break;
+
+
+    default:
+        /*
+         * we should never get here, so this is a really bad error 
+         */
+        snmp_log(LOG_ERR, "unknown mode (%d) in handle_FanInfo\n",
                  reqinfo->mode);
         return SNMP_ERR_GENERR;
     }

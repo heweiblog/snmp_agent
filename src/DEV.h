@@ -11,5 +11,7 @@
 void            init_DEV(void);
 Netsnmp_Node_Handler handle_Cpu5s;
 Netsnmp_Node_Handler handle_MemoryUsage;
+Netsnmp_Node_Handler handle_PowerInfo;
+Netsnmp_Node_Handler handle_FanInfo;
 
 #endif                          /* DEV_H */

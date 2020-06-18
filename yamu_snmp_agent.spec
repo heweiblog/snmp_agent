@@ -28,7 +28,7 @@ mkdir -p %{buildroot}/etc/
 mkdir -p %{buildroot}/etc/init.d/
 
 install -m 755 yamu_snmp_agent %{buildroot}/%{_bindir}/yamu_snmp_agent
-install -m 755 config/yamu_snmp_agentd  %{buildroot}/etc/init.d/
+install -m 755 config/yamu_snmp_agent  %{buildroot}/etc/init.d/
 
 %clean
 rm -rf %{buildroot}
@@ -36,7 +36,7 @@ rm -rf %{buildroot}
 %post
 if [ "$1" = "1" ]
 then
-	chkconfig --add yamu_snmp_agentd
+	chkconfig --add yamu_snmp_agent
 fi
 
 
@@ -44,12 +44,12 @@ fi
 %files
 %defattr(-,root,root,-)
 %{_bindir}/yamu_snmp_agent
-/etc/init.d/yamu_snmp_agentd
+/etc/init.d/yamu_snmp_agent
 
 %preun
 if [ "$1" = "0" ]
 then
-	chkconfig --del yamu_snmp_agentd
+	chkconfig --del yamu_snmp_agent
 fi
 
 

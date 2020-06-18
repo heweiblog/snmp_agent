@@ -23,7 +23,7 @@ prog="/usr/bin/yamu_snmp_agent"
 
 start() {
         # Start daemons.
-		service snmpd stop
+        killall -9 snmpd
 		snmpd --master=agentx
         echo -n $"Starting $name: "
         daemon $prog
@@ -36,6 +36,7 @@ start() {
 stop() {
         # Stop daemons.
         echo -n $"Shutting down $name: "
+		killall -9 snmpd
 	killproc $prog
 	RETVAL=$?
         echo
